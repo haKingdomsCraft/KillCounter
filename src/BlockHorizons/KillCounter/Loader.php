@@ -124,6 +124,6 @@ class Loader extends PluginBase {
 	 * @return Transistor
 	 */
 	public function getInstance(): EconomyAPI {
-		return $this->economyapi;
+		return $this->instance;
 	}
 }
