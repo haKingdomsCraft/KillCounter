@@ -11,8 +11,7 @@ use BlockHorizons\KillCounter\listeners\PlayerEventListener;
 use BlockHorizons\KillCounter\providers\BaseProvider;
 use BlockHorizons\KillCounter\providers\MySQLProvider;
 use BlockHorizons\KillCounter\providers\SQLiteProvider;
-use economizer\Economizer;
-use economizer\Transistor;
+use onebone\EconomyAPI;
 use EssentialsPE\EventHandlers\PlayerEventHandler;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
@@ -29,6 +28,16 @@ class Loader extends PluginBase {
 
 	public function onLoad() {
 		CommandOverloads::initialize();
+	if($this->getConfig()->get("Economy-Support") === true) {
+
+		$this->economyapi = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
+	if (!$this->economyapi) {
+			$this->getLogger()->info(TF::AQUA . "Economy support enabled, using economy API");
+			$this->economyEnabled = true;
+			$this->economyapi = $this->getEconomyAPI();
+	}
+			return true;
+		}
 	}
 
 	public function onEnable() {
@@ -36,8 +45,6 @@ class Loader extends PluginBase {
 			mkdir($this->getDataFolder());
 		}
 		$this->saveResource("config.yml");
-		
-		$this->prepareEconomy();
 		$this->selectProvider();
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerEventListener($this), $this);
 
@@ -106,42 +113,6 @@ class Loader extends PluginBase {
 		return $this->provider;
 	}
 
-	public function prepareEconomy(): bool {
-		if($this->getConfig()->get("Economy-Support") === true) {
-
-			$pluginManager = $this->getServer()->getPluginManager();
-			/** @var Plugin $economyPlugin */
-			$economyPlugin = null;
-
-			$economyPlugins = [
-				$pluginManager->getPlugin("EconomyAPI"),
-				$pluginManager->getPlugin("MassiveEconomy"),
-				$pluginManager->getPlugin("PocketMoney"),
-				$pluginManager->getPlugin("EssentialsPE")
-			];
-			foreach($economyPlugins as $ecoPlugin) {
-				if($ecoPlugin !== null) {
-					$economyPlugin = $ecoPlugin;
-					break;
-				}
-			}
-			if($economyPlugin === null || ($transistor = Economizer::getTransistorFor($economyPlugin)) === null) {
-				$this->getLogger()->info(TF::RED . "[Error] No supported economy plugin could be found. Disabling economy support.");
-				return false;
-			}
-			$this->economizer = new Economizer($this, $transistor);
-			if($this->economizer->ready()) {
-				$this->getLogger()->info(TF::AQUA . "Economy support enabled, using economy API from: " . $economyPlugin->getName());
-				$this->economyEnabled = true;
-				$this->economizer = $this->economizer->getTransistor();
-			} else {
-				$this->getLogger()->info(TF::RED . "Oops! Something went wrong when preparing the economy support.");
-			}
-			return true;
-		}
-		return false;
-	}
-
 	/**
 	 * @return bool
 	 */
@@ -152,7 +123,7 @@ class Loader extends PluginBase {
 	/**
 	 * @return Transistor
 	 */
-	public function getEconomy(): Transistor {
-		return $this->economizer;
+	public function getEconomy(): EconomyAPI {
+		return $this->economyapi;
 	}
 }
