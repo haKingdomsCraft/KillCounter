@@ -154,7 +154,7 @@ abstract class BaseProvider implements IProvider {
 	public function addDeaths($player, int $amount = 1, int $subtractPoints = -1, $subtractMoney = -1): bool {
 		$this->addPoints($player, $subtractPoints === -1 ? -$this->getLoader()->getConfig()->get("Points-Lost-Per-Death") * $amount : -$subtractPoints * $amount);
 		if($this->getLoader()->isEconomyEnabled() && $this->getLoader()->getConfig()->get("Enable-Money-Leeching") === true) {
-			$this->getLoader()->getEconomy()->takeMoney($this->getLoader()->getServer()->getPlayer($player), $subtractMoney === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Kill") * $amount : $subtractMoney * $amount);
+			$this->getLoader()->getEconomy()->reduceMoney($this->getLoader()->getServer()->getPlayer($player), $subtractMoney === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Kill") * $amount : $subtractMoney * $amount);
 		}
 		return $this->setDeaths($player, $this->getDeaths($player) + $amount);
 	}
