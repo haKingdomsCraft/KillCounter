@@ -34,7 +34,6 @@ class Loader extends PluginBase {
 	if (!$this->economyapi) {
 			$this->getLogger()->info(TF::AQUA . "Economy support enabled, using economy API");
 			$this->economyEnabled = true;
-			$this->economyapi = $pl;
 	}
 			return true;
 		}
