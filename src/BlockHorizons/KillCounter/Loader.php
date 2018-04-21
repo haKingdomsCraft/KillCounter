@@ -103,7 +103,7 @@ class Loader extends PluginBase {
 	public function isEconomyEnabled(): bool {
 		return $this->economyEnabled;
 	}
-	public function getEconomyAPI(){
+	public function getInstance(): EconomyAPI{
 		$pl = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
 		if(!$pl) return $pl;
 		if(!$pl->isEnabled()) return null;
