@@ -11,7 +11,7 @@ use BlockHorizons\KillCounter\listeners\PlayerEventListener;
 use BlockHorizons\KillCounter\providers\BaseProvider;
 use BlockHorizons\KillCounter\providers\MySQLProvider;
 use BlockHorizons\KillCounter\providers\SQLiteProvider;
-use onebone\EconomyAPI;
+use onebone\economyapi\EconomyAPI;
 use EssentialsPE\EventHandlers\PlayerEventHandler;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
@@ -119,7 +119,7 @@ class Loader extends PluginBase {
 		return $this->economyEnabled;
 	}
 
-	public function getEconomy(){
+	public function getEconomyAPI(){
 		$pl = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
 		if(!$pl) return $pl;
 		if(!$pl->isEnabled()) return null;
