@@ -107,7 +107,7 @@ abstract class BaseProvider implements IProvider {
 		}
 		$this->addPoints($player, $points === -1 ? $this->getLoader()->getConfig()->get("Points-Per-Player-Kill") * $amount + $extraPoints: $points * $amount);
 		if($this->getLoader()->isEconomyEnabled()) {
-			$this->getLoader()->getEconomy()->addMoney($this->getLoader()->getServer()->getPlayer($player), $money === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Kill") * $amount + $extraMoney : $money * $amount);
+			$this->getLoader()->getEconomyAPI()->addMoney($this->getLoader()->getServer()->getPlayer($player), $money === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Kill") * $amount + $extraMoney : $money * $amount);
 		}
 		return $this->setPlayerKills($player, $this->getPlayerKills($player) + $amount);
 	}
@@ -123,7 +123,7 @@ abstract class BaseProvider implements IProvider {
 	public function addPlayerAssists($player, int $amount = 1, int $points = -1, int $money = -1): bool {
 		$this->addPoints($player, $points === -1 ? $this->getLoader()->getConfig()->get("Points-Per-Player-Assist") * $amount : $points * $amount);
 		if($this->getLoader()->isEconomyEnabled()) {
-			$this->getLoader()->getEconomy()->addMoney($this->getLoader()->getServer()->getPlayer($player), $money === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Assist") * $amount : $money * $amount);
+			$this->getLoader()->getEconomyAPI()->addMoney($this->getLoader()->getServer()->getPlayer($player), $money === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Assist") * $amount : $money * $amount);
 		}
 		return $this->setPlayerAssists($player, $this->getPlayerAssists($player) + $amount);
 	}
@@ -139,7 +139,7 @@ abstract class BaseProvider implements IProvider {
 	public function addEntityKills($player, int $amount = 1, int $points = -1, int $money = -1): bool {
 		$this->addPoints($player, $points === -1 ? $this->getLoader()->getConfig()->get("Points-Per-Entity-Kill") * $amount : $points * $amount);
 		if($this->getLoader()->isEconomyEnabled()) {
-			$this->getLoader()->getEconomy()->addMoney($this->getLoader()->getServer()->getPlayer($player), $money === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Entity-Kill") * $amount : $money * $amount);
+			$this->getLoader()->getEconomyAPI()->addMoney($this->getLoader()->getServer()->getPlayer($player), $money === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Entity-Kill") * $amount : $money * $amount);
 		}
 		return $this->setEntityKills($player, $this->getEntityKills($player) + $amount);
 	}
@@ -154,7 +154,7 @@ abstract class BaseProvider implements IProvider {
 	public function addDeaths($player, int $amount = 1, int $subtractPoints = -1, $subtractMoney = -1): bool {
 		$this->addPoints($player, $subtractPoints === -1 ? -$this->getLoader()->getConfig()->get("Points-Lost-Per-Death") * $amount : -$subtractPoints * $amount);
 		if($this->getLoader()->isEconomyEnabled() && $this->getLoader()->getConfig()->get("Enable-Money-Leeching") === true) {
-			$this->getLoader()->getEconomy()->reduceMoney($this->getLoader()->getServer()->getPlayer($player), $subtractMoney === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Kill") * $amount : $subtractMoney * $amount);
+			$this->getLoader()->getEconomyAPI()->reduceMoney($this->getLoader()->getServer()->getPlayer($player), $subtractMoney === -1 ? $this->getLoader()->getConfig()->get("Money-Per-Player-Kill") * $amount : $subtractMoney * $amount);
 		}
 		return $this->setDeaths($player, $this->getDeaths($player) + $amount);
 	}
